@@ -16,10 +16,11 @@
         body {
             font-family: 'Caveat', cursive;
             background: linear-gradient(135deg, #87CEEB 0%, #98D8E8 30%, #B4E7CE 100%);
-            padding: 15px;
+            padding: 10px;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            margin: 0;
         }
 
         body::before {
@@ -40,32 +41,34 @@
         }
 
         .widget-container {
-            max-width: 400px;
+            width: 100%;
+            max-width: min(400px, 100vw);
             margin: 0 auto;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .widget-container.expanded {
-            max-width: 850px;
+            max-width: min(850px, 100vw);
         }
 
         .container {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(15px);
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            border: 3px solid #7FB069;
+            border-radius: 20px;
+            padding: clamp(15px, 4vw, 25px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+            border: 2px solid #7FB069;
             position: relative;
             transition: all 0.5s ease;
+            min-height: fit-content;
         }
 
         .container::before {
             content: '🌸';
             position: absolute;
-            top: -12px;
-            left: 25px;
-            font-size: 24px;
+            top: -10px;
+            left: clamp(15px, 5vw, 25px);
+            font-size: clamp(18px, 4vw, 24px);
             animation: bounce 2s infinite;
         }
 
@@ -73,8 +76,8 @@
             content: '🍃';
             position: absolute;
             top: -8px;
-            right: 30px;
-            font-size: 20px;
+            right: clamp(20px, 6vw, 30px);
+            font-size: clamp(16px, 3.5vw, 20px);
             animation: sway 3s ease-in-out infinite;
         }
 
@@ -106,18 +109,18 @@
         }
 
         .course-title-mini {
-            font-size: 20px;
+            font-size: clamp(16px, 4vw, 20px);
             color: #2F5233;
             font-weight: 700;
             border: none;
             background: transparent;
             font-family: 'Caveat', cursive;
-            min-width: 120px;
+            min-width: clamp(100px, 25vw, 120px);
             flex: 1;
         }
 
         .current-grade-mini {
-            font-size: 36px;
+            font-size: clamp(28px, 7vw, 36px);
             font-weight: 800;
             position: relative;
             display: flex;
@@ -173,9 +176,14 @@
             background: linear-gradient(90deg, #7FB069, #A8D5BA);
         }
 
+        .calcifer-icon svg {
+            width: clamp(32px, 8vw, 40px);
+            height: clamp(32px, 8vw, 40px);
+        }
+
         .action-buttons {
             display: flex;
-            gap: 10px;
+            gap: clamp(8px, 2vw, 10px);
             align-items: center;
         }
 
@@ -591,11 +599,23 @@
             display: flex;
         }
 
-        /* Responsive */
+        /* Responsive design */
         @media (max-width: 768px) {
             .header-minimized {
                 flex-direction: column;
                 text-align: center;
+                gap: 12px;
+            }
+            
+            .grade-display {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .action-buttons {
+                justify-content: center;
+                width: 100%;
+                flex-wrap: wrap;
             }
             
             .assignment {
@@ -606,6 +626,30 @@
             .current-grade::before,
             .current-grade::after {
                 display: none;
+            }
+
+            .expand-btn::before {
+                content: '📊';
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-minimized {
+                gap: 8px;
+            }
+            
+            .course-title-mini {
+                text-align: center;
+                min-width: auto;
+            }
+            
+            .expand-btn {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+            
+            .expand-btn::before {
+                content: '';
             }
         }
     </style>
@@ -629,7 +673,7 @@
                 <div class="action-buttons">
                     <button class="expand-btn" onclick="toggleWidget()">View Details</button>
                     <div class="calcifer-icon">
-                        <svg width="40" height="40" viewBox="0 0 100 100" style="cursor: pointer;" onclick="quickAddGrade()">
+                        <svg width="40" height="40" viewBox="0 0 100 100" style="cursor: pointer;" onclick="showMotivation()">
                             <!-- Flame body -->
                             <path d="M50 85 C30 85, 20 70, 25 55 C20 45, 25 35, 35 30 C40 20, 50 15, 60 20 C70 15, 80 25, 75 35 C85 40, 90 50, 85 60 C90 70, 80 85, 50 85 Z" fill="#FF6B6B" stroke="#8B4513" stroke-width="2"/>
                             <!-- Inner flame -->
@@ -880,29 +924,130 @@
             container.classList.toggle('expanded');
         }
 
-        function quickAddGrade() {
-            // Quick add functionality - you can expand this
-            const gradeName = prompt('🌸 What assignment did you complete?');
-            const score = prompt('✨ What score did you get?');
-            const total = prompt('🎯 What was it out of?');
+        function showMotivation() {
+            const motivationalMessages = [
+                "🌟 You're doing amazing! Every small step forward is progress worth celebrating!",
+                "🔥 Your dedication is like Calcifer's flame - it burns bright and steady!",
+                "🌸 Just like Chihiro, you're braver than you believe and stronger than you think!",
+                "🍃 Learning is a journey, not a destination. Enjoy every magical moment!",
+                "⭐ Your curiosity is your superpower - keep asking questions and exploring!",
+                "🌱 Growth happens outside your comfort zone. You're exactly where you need to be!",
+                "✨ Remember: even Howl had to practice his magic. Your efforts are paying off!",
+                "🏰 You're building your own castle of knowledge, brick by brick!",
+                "🌈 Every challenge is a chance to discover how capable you truly are!",
+                "💫 Your mind is like a Studio Ghibli film - full of wonder and endless possibilities!",
+                "🦋 Transform like Haku - let your learning change you in beautiful ways!",
+                "🌙 Even on tough days, you're making progress. Trust the process!",
+                "🎋 Like bamboo, bend but don't break. You're more resilient than you know!",
+                "🌺 Your efforts are blooming into wisdom. Keep nurturing your growth!",
+                "🕊️ Soar high like a paper airplane - your dreams have no limits!",
+                "🌊 Ride the waves of learning with curiosity and courage!",
+                "⛅ Every cloud has a silver lining, and every mistake has a lesson!",
+                "🎨 You're painting your future with every study session. Make it beautiful!",
+                "🦋 Like San with the forest spirits, you're connected to something greater through learning!",
+                "🌠 Shoot for the moon! Even if you miss, you'll land among the stars!"
+            ];
+
+            const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
             
-            if (gradeName && score && total) {
-                // Find first category to add to (or you could make this more sophisticated)
-                const firstCategory = document.querySelector('.category .assignments');
-                if (firstCategory) {
-                    const newAssignment = document.createElement('div');
-                    newAssignment.className = 'assignment';
-                    newAssignment.innerHTML = `
-                        <input type="text" placeholder="Assignment name..." value="${gradeName}">
-                        <input type="number" placeholder="Score" min="0" max="100" value="${score}" onchange="calculateGrade()">
-                        <input type="number" placeholder="Total" min="0" max="100" value="${total}" onchange="calculateGrade()">
-                        <button class="delete-btn" onclick="deleteAssignment(this)">🗑️</button>
-                    `;
-                    firstCategory.appendChild(newAssignment);
-                    calculateGrade();
-                    createMagicSparkle(200, 200);
-                }
+            // Create a magical notification
+            showMagicalNotification(randomMessage);
+            
+            // Extra sparkles for motivation!
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createMagicSparkle(
+                        Math.random() * window.innerWidth, 
+                        Math.random() * window.innerHeight
+                    );
+                }, i * 200);
             }
+        }
+
+        function showMagicalNotification(message) {
+            // Remove existing notification if any
+            const existingNotification = document.querySelector('.magical-notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'magical-notification';
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <div class="notification-close" onclick="this.parentElement.parentElement.remove()">×</div>
+                    <p>${message}</p>
+                </div>
+            `;
+
+            // Add styles for the notification
+            const style = document.createElement('style');
+            style.textContent = `
+                .magical-notification {
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    z-index: 1000;
+                    animation: slideDown 0.5s ease-out;
+                }
+                
+                .notification-content {
+                    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 232, 0.95));
+                    backdrop-filter: blur(15px);
+                    border: 3px solid #7FB069;
+                    border-radius: 20px;
+                    padding: 20px 25px;
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+                    max-width: 400px;
+                    position: relative;
+                    font-family: 'Caveat', cursive;
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #2F5233;
+                    text-align: center;
+                    line-height: 1.4;
+                }
+                
+                .notification-close {
+                    position: absolute;
+                    top: 8px;
+                    right: 12px;
+                    cursor: pointer;
+                    font-size: 24px;
+                    color: #7FB069;
+                    font-weight: bold;
+                    transition: all 0.3s ease;
+                }
+                
+                .notification-close:hover {
+                    color: #2F5233;
+                    transform: scale(1.1);
+                }
+                
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-50%) translateY(-30px) scale(0.9);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(0) scale(1);
+                    }
+                }
+            `;
+            
+            document.head.appendChild(style);
+            document.body.appendChild(notification);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification && notification.parentNode) {
+                    notification.style.animation = 'slideDown 0.3s ease-out reverse';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, 5000);
         }
 
         function addAssignment(button) {
